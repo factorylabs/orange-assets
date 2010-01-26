@@ -1,0 +1,13 @@
+.DS_Store
+.idea
+*.iml
+*.ipr
+*.iws
+*.log
+*.tmproj
+.as2_classpath
+.as3_classpath
+.project
+.settings
+.svn
+*.launch
