@@ -354,7 +354,9 @@ package ${enclosing_package}&#13;
 	{
 		${cursor}
 	}
-}</template><template autoinsert="true" context="com.powerflasher.fdt.ui.editor.template.as3" deleted="false" description="Generates a for loop for use in a performance test" enabled="true" name="FPerformanceTest loop">for( var i :uint = 0; i &lt; loops; ++i )
+}
+
+new MethodTest( ${foo}, null, '${foo}' )</template><template autoinsert="true" context="com.powerflasher.fdt.ui.editor.template.as3" deleted="false" description="Generates a for loop for use in a performance test" enabled="true" name="FPerformanceTest loop">for( var i :uint = 0; i &lt; loops; ++i )
 {
 	${cursor}
 }</template><template autoinsert="true" context="com.powerflasher.fdt.ui.editor.template.as3" deleted="false" description="Creates a generic tare method" enabled="true" name="FPerformanceTest Tare Method">public function tare() :void
@@ -365,6 +367,9 @@ package ${enclosing_package}&#13;
 }</template><template autoinsert="true" context="com.powerflasher.fdt.ui.editor.template.as3" deleted="false" description="Generates the class used for running Performance Test Cases" enabled="true" name="FPerformanceTestCase Class">
 package ${enclosing_package}
 {
+	import com.gskinner.performance.MethodTest;
+	import com.gskinner.performance.TestSuite;
+	
 	/**
  	 * Generate the performance test cases for the ${Klass} class.
  	 *
@@ -378,13 +383,27 @@ package ${enclosing_package}
 	 * @author		${user}
 	 * @version		1.0.0 :: ${date}
 	 */
-	public class ${enclosing_type} 
+	public class ${enclosing_type}
+		extends TestSuite
 	{
 		protected var loops		:uint = 100000;
-		public var description	:String = '${description}';
 
 		public function ${enclosing_type}()
 		{
+			name = '${enclosing_type}';
+			description = '${description}. ' + loops + ' loops.';
+			tareTest = new MethodTest( tare );
+			initFunction = init;
+			iterations = 4;
+			tests = 
+			[
+				new MethodTest( ${foo}, null, '${foo}' )
+			];
+		}
+		
+		protected function init() :void
+		{
+			
 		}
 
 		public function tare() :void
@@ -617,6 +636,8 @@ public function ${foo}() :void
 }</template><template autoinsert="true" context="com.powerflasher.fdt.ui.editor.template.as3" deleted="false" description="Generates the class used for running Test Cases" enabled="true" name="FTestCase Class">
 package ${enclosing_package}
 {
+	import asunit.asserts.assertTrue;
+	
 	/**
  	 * Generate the test cases for the ${Klass} class.
  	 *
@@ -632,29 +653,24 @@ package ${enclosing_package}
 	 */
 	public class ${enclosing_type} 
 	{
-		
-		[BeforeClass]
-		public static function runBeforeClass() :void
-		{
-			
-		}
-		
-		[AfterClass]
-		public static function runAfterClass() :void
-		{
-			
-		}
+		private var _${property}	:${Klass};
 		
 		[Before]
 		public function runBeforeEachTest() :void
 		{
-			
+			_${property} = new ${Klass}();
 		}
 		
 		[After]
 		public function runAfterEachTest() :void
 		{
-			
+			_${property} = null;
+		}
+		
+		[Test]
+		public function constructor() :void
+		{
+			assertTrue( '_${property} is ${Klass}', _${property} is ${Klass} );
 		}
 		
 		[Test]
